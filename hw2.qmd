@@ -53,8 +53,9 @@ d$workbin <- mapvalues(d$workingday, from = c('0', '1'), to = c('no', 'yes'))
 ## Q3
 Recode the yr variable to be a factor with levels 2011 and 2012, with 2011 as the baseline
 level.
-```{r q1}
-# code here
+```{r q3}
+d$years <- mapvalues(d$yr, from = c('0', '1'), to = c('2011', '2012'))
+# cbind(d$years, d$yr) # checks accuracy 
 ```
 
 ## Q4
