@@ -1,0 +1,61 @@
+---
+title: "HW2: OLS and Linear Algebra"
+author: "Insert your name here"
+date: "Insert date here"
+format: pdf
+---
+
+# Packages
+
+```{r load-packages}
+# load packages here
+```
+
+# Data
+
+```{r import-data}
+# import data here
+```
+
+
+# Data Wrangling
+
+## Q1 
+
+```{r q1}
+# code here
+```
+
+## Q2 
+
+## Q3
+
+## Q4
+
+## Q5
+
+# Data Visualization 
+
+## Q6
+
+```{r data-viz}
+# code to recreate plot here
+```
+
+*Write narrative response here.*
+
+# Modeling
+
+## Q7
+
+## Q8
+
+## Q9
+
+# Using Linear Algebra to Do Regression
+
+## Q10
+
+## Q11
+
+## Q12
