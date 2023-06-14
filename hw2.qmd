@@ -1,7 +1,7 @@
 ---
 title: "HW2: OLS and Linear Algebra"
-author: "Insert your name here"
-date: "Insert date here"
+author: "Kaori hirano"
+date: "6 14 2023"
 format: pdf
 ---
 
@@ -27,12 +27,24 @@ format: pdf
 ```
 
 ## Q2 
+```{r q1}
+# code here
+```
 
 ## Q3
+```{r q1}
+# code here
+```
 
 ## Q4
+```{r q1}
+# code here
+```
 
 ## Q5
+```{r q1}
+# code here
+```
 
 # Data Visualization 
 
@@ -47,15 +59,33 @@ format: pdf
 # Modeling
 
 ## Q7
+```{r q1}
+# code here
+```
 
 ## Q8
+```{r q1}
+# code here
+```
 
 ## Q9
+```{r q1}
+# code here
+```
 
 # Using Linear Algebra to Do Regression
 
 ## Q10
+```{r q1}
+# code here
+```
 
 ## Q11
+```{r q1}
+# code here
+```
 
 ## Q12
+```{r q1}
+# code here
+```
