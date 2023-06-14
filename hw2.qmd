@@ -43,8 +43,11 @@ levels(d$season)
 Recode the binary variables holiday and workingday to be factors with levels “no” (0) and
 “yes” (1), with “no” as the baseline level.
 ```{r q2}
-# code here
-
+# recodes 0 to no and 1 to yes
+d$hbin <- mapvalues(d$holiday, from = c('0', '1'), to = c('no', 'yes'))
+# cbind(head(d$hbin), head(d$holiday)) # checks accuracy 
+d$workbin <- mapvalues(d$workingday, from = c('0', '1'), to = c('no', 'yes')) 
+# cbind(d$workbin, d$workinday) # checks accuracy 
 ```
 
 ## Q3
