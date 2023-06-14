@@ -9,39 +9,63 @@ format: pdf
 
 ```{r load-packages}
 # load packages here
+library(plyr)
+library(tidyverse)
+install.packages('lmSupport')
+library(lmSupport)
 ```
 
 # Data
 
 ```{r import-data}
 # import data here
+dcbikeshare <- read.csv('data/bikeshare-day.csv')
 ```
 
 
 # Data Wrangling
 
 ## Q1 
+Recode the season variable to be a factor with meaningful level names as outlined in the
+codebook (at the link above), with “spring” as the baseline level.
 
 ```{r q1}
 # code here
+d <- dcbikeshare
+as.factor(d$season)
+(d$season <- mapvalues(d$season, from = c('1','2','3', '4'), to = c("Winter", "Spring", "Summer", "Fall"))) # recodes, not ideal method but lmSupport wasn't loading...
+
+d$season <- fct_relevel(d$season, c('Spring', 'Summer', 'Fall', 'Winter')) #relevels
+levels(d$season)
 ```
 
 ## Q2 
-```{r q1}
+Recode the binary variables holiday and workingday to be factors with levels “no” (0) and
+“yes” (1), with “no” as the baseline level.
+```{r q2}
 # code here
+
 ```
 
 ## Q3
+Recode the yr variable to be a factor with levels 2011 and 2012, with 2011 as the baseline
+level.
 ```{r q1}
 # code here
 ```
 
 ## Q4
+Recode the weathersit variable as 1 - “clear”, 2 - “mist”, 3 - “light precipitation,” and 4 -
+“heavy precipitation”, with “clear” as the baseline
 ```{r q1}
 # code here
 ```
 
 ## Q5
+Calculate raw temperature, feeling temperature, humidity, and windspeed as their values given
+in the dataset multiplied by the maximum raw values stated in the codebook for each variable.
+Instead of writing over the existing variables, create new ones with concise but
+informative names.
 ```{r q1}
 # code here
 ```
