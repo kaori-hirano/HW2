@@ -111,17 +111,25 @@ ggplot(d, aes(x = dteday, y = cnt, color = raw_ftemp)) +
 # Modeling
 
 ## Q7
-```{r q1}
-# code here
-```
+```{r q7}
+lm1 <- lm(cnt ~ raw_temp, d) # num rentals by raw temperature
+summary(lm1) 
 
-## Q8
-```{r q1}
-# code here
+# having trouble getting a point prediction
+point <- data.frame(x=c((63-32)*(5/9)))
+predict(lm1, point, interval = 'confidence', type = 'response')
 ```
+There is a relationship between the total daily bike rentals and the daily temperature (b = 161.969, p val =< .0001, F(729, 1) = 473.5). The relationship seems to be moderately strong as seen by the adjusted R squared of .3929. The relationship is positive as indicated by the positive R squared. 
+## Q8
+```{r q8}
+lm2 <- lm(cnt ~ raw_ftemp, d) # num rentals by raw temperature
+summary(lm2) 
+summary(lm1)
+```
+Feeling temperature is a better predictor of bike rentals, although not by large amount. Both have a statistically significant result (pval < .001), but there is a lower standard error for feeling temperature and more importantly a higher correlation coefficient and F-statistic. 
 
 ## Q9
-```{r q1}
+```{r q9}
 # code here
 ```
 
