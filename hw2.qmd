@@ -63,6 +63,16 @@ Recode the weathersit variable as 1 - “clear”, 2 - “mist”, 3 - “light 
 “heavy precipitation”, with “clear” as the baseline
 ```{r q1}
 # code here
+as.factor(d$weathersit)
+
+# d <- d %>%
+#  mutate(weathersit = case_when(
+#    weathersit == "1"   ~ "clear",
+#    weathersit == "2"   ~ "mist",
+#    weathersit == '3'   ~ "light precipitation",
+#    weathersit == "4"   ~ "heavy precipitation",
+#    TRUE                ~ weathersit
+#  ))
 ```
 
 ## Q5
@@ -71,7 +81,11 @@ in the dataset multiplied by the maximum raw values stated in the codebook for e
 Instead of writing over the existing variables, create new ones with concise but
 informative names.
 ```{r q1}
-# code here
+# multiplies normalized values by their stated maximum values to get raw values
+d$raw_temp <- d$temp * 41
+d$raw_ftemp <- d$atemp * 50
+d$raw_hum <- d$hum * 100
+d$raw_ws <- d$windspeed * 67
 ```
 
 # Data Visualization 
@@ -79,7 +93,17 @@ informative names.
 ## Q6
 
 ```{r data-viz}
-# code to recreate plot here
+# recreases image with raw feeling temp
+ggplot(d, aes(x = dteday, y = cnt, color = raw_ftemp)) + 
+  geom_point() +
+  labs(title = "Bike rentals in DC, 2011 and 2012",
+       subtitle = "Warmer temperatures associated with more bike rentals",
+       x = "Date", y = "Bike rentals",
+       color = "Temperature (C)",
+       caption = "Source: Palmer Station LTER / palmerpenguins package") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+   scale_x_continuous(breaks = c(, 20), labels = c("2011-01", "2011-07", '2021-01', '2021-07', '2013-01'))
+# find a way to get these specific dates
 ```
 
 *Write narrative response here.*
@@ -108,7 +132,7 @@ informative names.
 # code here
 ```
 
-## Q11
+## Q11 refer to q9
 ```{r q1}
 # code here
 ```
