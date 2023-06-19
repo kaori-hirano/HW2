@@ -130,8 +130,16 @@ Feeling temperature is a better predictor of bike rentals, although not by large
 
 ## Q9
 ```{r q9}
-# code here
+# fit full model
+names(d)
+lm_full <- lm(cnt ~ season + years + holiday + workingday + weathersit + raw_temp + raw_ftemp + raw_hum + raw_ws + (raw_ftemp * holiday), d)
+summary(lm_full)
 ```
+Yes, there is a relationship between the predictors and the response, as seen by the adjusted R-squared value of .8142 indicating a high level of correlation. 
+
+b) the predictors that appear to have a statistically significant relationship to the amount of bike rentals are the season, the year, holiday status, weather type, raw temperature, raw humidity, and raw windspeed. 
+
+c) the coefficients for the season suggest that there is a negative relationship for summer and winter with bike rentals and a positive relationship with fall when compared to a baseline level of spring's effect on rentals. 
 
 # Using Linear Algebra to Do Regression
 
