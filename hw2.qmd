@@ -115,11 +115,23 @@ ggplot(d, aes(x = dteday, y = cnt, color = raw_ftemp)) +
 lm1 <- lm(cnt ~ raw_temp, d) # num rentals by raw temperature
 summary(lm1) 
 
-# having trouble getting a point prediction
-point <- data.frame(x=c((63-32)*(5/9)))
-predict(lm1, point, interval = 'confidence', type = 'response')
+temp <- (63 - 32) * (5/9) # converts to C
+(pred <- 1214.642 + 161.969*temp) # puts into equation
+confint(lm1) # gets CI
+
+new <- data.frame(raw_temp = (temp)) # makes dataframe for predict
+
+predict(lm1, newdata = new, interval = 'confidence')
+predict(lm1, newdata = new, interval = 'predict')
 ```
-There is a relationship between the total daily bike rentals and the daily temperature (b = 161.969, p val =< .0001, F(729, 1) = 473.5). The relationship seems to be moderately strong as seen by the adjusted R squared of .3929. The relationship is positive as indicated by the positive R squared. 
+a) There is a relationship between the total daily bike rentals and the daily temperature (b = 161.969, F(1,729) = 473.5, p < .0001)
+
+b) The relationship seems to be moderate as seen by the adjusted R squared of .3929. 
+
+c) The relationship is positive as indicated by the positive R squared. 
+
+d) The predicted number of bike rentals with a temp of 63 degrees F is 4004. The associated 95% confidence interval is (3885.57, 4122.63) and prediction interval is (1038.464, 6969.737).
+
 ## Q8
 ```{r q8}
 lm2 <- lm(cnt ~ raw_ftemp, d) # num rentals by raw temperature
