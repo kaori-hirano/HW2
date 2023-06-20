@@ -144,16 +144,16 @@ c) the coefficients for the season suggest that there is a negative relationship
 # Using Linear Algebra to Do Regression
 
 ## Q10
-```{r q1}
-# code here
+```{r q10}
+X <- model.matrix(lm_full)
 ```
 
 ## Q11 refer to q9
-```{r q1}
-# code here
+```{r q11}
+y <- model.frame(lm_full)
 ```
 
 ## Q12
-```{r q1}
-# code here
+```{r q12}
+(vec <- (solve(t(X)*X)*t(X)*y))
 ```
