@@ -33,9 +33,9 @@ codebook (at the link above), with “spring” as the baseline level.
 # code here
 d <- dcbikeshare
 as.factor(d$season)
-(d$season <- mapvalues(d$season, from = c('1','2','3', '4'), to = c("Winter", "Spring", "Summer", "Fall"))) # recodes, not ideal method but lmSupport wasn't loading...
+(d$season <- mapvalues(d$season, from = c('1','2','3', '4'), to = c("Winter", "Spring", "Summer", "Fall"))) # assigns strings to number values 
 
-d$season <- fct_relevel(d$season, c('Spring', 'Summer', 'Fall', 'Winter')) #relevels
+d$season <- fct_relevel(d$season, c('Spring', 'Summer', 'Fall', 'Winter')) #relevels with spring as baseline
 levels(d$season)
 ```
 
@@ -54,6 +54,7 @@ d$workbin <- mapvalues(d$workingday, from = c('0', '1'), to = c('no', 'yes'))
 Recode the yr variable to be a factor with levels 2011 and 2012, with 2011 as the baseline
 level.
 ```{r q3}
+# recodes year to 2011 and 2012
 d$years <- mapvalues(d$yr, from = c('0', '1'), to = c('2011', '2012'))
 # cbind(d$years, d$yr) # checks accuracy 
 ```
@@ -62,17 +63,18 @@ d$years <- mapvalues(d$yr, from = c('0', '1'), to = c('2011', '2012'))
 Recode the weathersit variable as 1 - “clear”, 2 - “mist”, 3 - “light precipitation,” and 4 -
 “heavy precipitation”, with “clear” as the baseline
 ```{r q1}
-# code here
-as.factor(d$weathersit)
+# changes number values to corresponding weather types as strings
+d$weathersit <- as.factor(d$weathersit)
 
-# d <- d %>%
-#  mutate(weathersit = case_when(
-#    weathersit == "1"   ~ "clear",
-#    weathersit == "2"   ~ "mist",
-#    weathersit == '3'   ~ "light precipitation",
-#    weathersit == "4"   ~ "heavy precipitation",
-#    TRUE                ~ weathersit
-#  ))
+ d <- d %>%
+  mutate(weathersit = case_when(
+    weathersit == "1"   ~ "clear",
+    weathersit == "2"   ~ "mist",
+    weathersit == "3"   ~ "light precipitation",
+    weathersit == "4"   ~ "heavy precipitation",
+    TRUE                ~ weathersit
+  ))
+# head(d$weathersit) check
 ```
 
 ## Q5
@@ -80,7 +82,7 @@ Calculate raw temperature, feeling temperature, humidity, and windspeed as their
 in the dataset multiplied by the maximum raw values stated in the codebook for each variable.
 Instead of writing over the existing variables, create new ones with concise but
 informative names.
-```{r q1}
+```{r q5}
 # multiplies normalized values by their stated maximum values to get raw values
 d$raw_temp <- d$temp * 41
 d$raw_ftemp <- d$atemp * 50
@@ -92,7 +94,7 @@ d$raw_ws <- d$windspeed * 67
 
 ## Q6
 
-```{r data-viz}
+```{r data-viz q6}
 # recreases image with raw feeling temp
 ggplot(d, aes(x = dteday, y = cnt, color = raw_ftemp)) + 
   geom_point() +
@@ -121,8 +123,8 @@ confint(lm1) # gets CI
 
 new <- data.frame(raw_temp = (temp)) # makes dataframe for predict
 
-predict(lm1, newdata = new, interval = 'confidence')
-predict(lm1, newdata = new, interval = 'predict')
+predict(lm1, newdata = new, interval = 'confidence') #gets CI interval
+predict(lm1, newdata = new, interval = 'predict') # gets pred interval
 ```
 a) There is a relationship between the total daily bike rentals and the daily temperature (b = 161.969, F(1,729) = 473.5, p < .0001)
 
@@ -136,15 +138,14 @@ d) The predicted number of bike rentals with a temp of 63 degrees F is 4004. The
 ```{r q8}
 lm2 <- lm(cnt ~ raw_ftemp, d) # num rentals by raw temperature
 summary(lm2) 
-summary(lm1)
 ```
-Feeling temperature is a better predictor of bike rentals, although not by large amount. Both have a statistically significant result (pval < .001), but there is a lower standard error for feeling temperature and more importantly a higher correlation coefficient and F-statistic. 
+Feeling temperature is a better predictor of bike rentals, although not by large amount. Both have a statistically significant result (p < .001), but there is a lower standard error for feeling temperature and more importantly a higher correlation coefficient and F-statistic. 
 
 ## Q9
 ```{r q9}
 # fit full model
 names(d)
-lm_full <- lm(cnt ~ season + years + holiday + workingday + weathersit + raw_temp + raw_ftemp + raw_hum + raw_ws + (raw_ftemp * holiday), d)
+lm_full <- lm(cnt ~ season + years + hbin + workbin + weathersit + raw_temp + raw_ftemp + raw_hum + raw_ws + (raw_ftemp * holiday), d)
 summary(lm_full)
 ```
 Yes, there is a relationship between the predictors and the response, as seen by the adjusted R-squared value of .8142 indicating a high level of correlation. 
