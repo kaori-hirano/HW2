@@ -1,6 +1,6 @@
 ---
 title: "HW2: OLS and Linear Algebra"
-author: "Kaori hirano"
+author: "Kaori Hirano"
 date: "6 14 2023"
 format: pdf
 ---
@@ -10,7 +10,7 @@ format: pdf
 ```{r load-packages}
 # load packages here
 library(plyr)
-library(tidyverse)
+suppressPackageStartupMessages(library(tidyverse))
 ```
 
 # Data
@@ -24,22 +24,21 @@ dcbikeshare <- read.csv('data/bikeshare-day.csv')
 # Data Wrangling
 
 ## Q1 
-Recode the season variable to be a factor with meaningful level names as outlined in the
-codebook (at the link above), with “spring” as the baseline level.
 
 ```{r q1}
 # code here
 d <- dcbikeshare
-as.factor(d$season)
-(d$season <- mapvalues(d$season, from = c('1','2','3', '4'), to = c("Winter", "Spring", "Summer", "Fall"))) # assigns strings to number values 
+# as.factor(d$season)
+d$season <- mapvalues(d$season, from = c('1','2','3', '4'), 
+                      to = c("Winter", "Spring", "Summer", "Fall")) 
+# assigns strings to number values 
 
-d$season <- fct_relevel(d$season, c('Spring', 'Summer', 'Fall', 'Winter')) #relevels with spring as baseline
+d$season <- fct_relevel(d$season, c('Spring', 'Summer', 'Fall', 'Winter')) 
+#relevels with spring as baseline
 # levels(d$season)
 ```
 
 ## Q2 
-Recode the binary variables holiday and workingday to be factors with levels “no” (0) and
-“yes” (1), with “no” as the baseline level.
 ```{r q2}
 # recodes 0 to no and 1 to yes
 d$hbin <- mapvalues(d$holiday, from = c('0', '1'), to = c('no', 'yes'))
@@ -49,8 +48,7 @@ d$workbin <- mapvalues(d$workingday, from = c('0', '1'), to = c('no', 'yes'))
 ```
 
 ## Q3
-Recode the yr variable to be a factor with levels 2011 and 2012, with 2011 as the baseline
-level.
+
 ```{r q3}
 # recodes year to 2011 and 2012
 d$years <- mapvalues(d$yr, from = c('0', '1'), to = c('2011', '2012'))
@@ -58,8 +56,6 @@ d$years <- mapvalues(d$yr, from = c('0', '1'), to = c('2011', '2012'))
 ```
 
 ## Q4
-Recode the weathersit variable as 1 - “clear”, 2 - “mist”, 3 - “light precipitation,” and 4 -
-“heavy precipitation”, with “clear” as the baseline
 ```{r q4}
 # changes number values to corresponding weather types as strings
 d$weathersit <- as.factor(d$weathersit)
@@ -76,10 +72,6 @@ d$weathersit <- as.factor(d$weathersit)
 ```
 
 ## Q5
-Calculate raw temperature, feeling temperature, humidity, and windspeed as their values given
-in the dataset multiplied by the maximum raw values stated in the codebook for each variable.
-Instead of writing over the existing variables, create new ones with concise but
-informative names.
 ```{r q5}
 # multiplies normalized values by their stated maximum values to get raw values
 d$raw_temp <- d$temp * 41
@@ -103,12 +95,12 @@ ggplot(d, aes(x = date, y = cnt, color = raw_ftemp)) +
        subtitle = "Warmer temperatures associated with more bike rentals",
        x = "Date", y = "Bike rentals",
        color = "Temperature (C)",
-       caption = "Source: ") +
+       caption = "Source: http://archive.ics.uci.edu/ml/datasets/Bike+Sharing+Dataset") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 
 ```
 
-*Write narrative response here.*
+The graph supports that warmer temperatures tend to be associated with higher bike rentals. Bike rentals are lower in winter months, then trend upward in summer months before going back down. Overall, there do appear to be more rentals in 2012 than 2011, even though both years follow the more in warmer temperatures and less in cooler temperatures pattern.  
 
 # Modeling
 
@@ -117,10 +109,7 @@ ggplot(d, aes(x = date, y = cnt, color = raw_ftemp)) +
 lm1 <- lm(cnt ~ raw_temp, d) # num rentals by raw temperature
 summary(lm1) 
 
-temp <- (63 - 32) * (5/9) # converts to C
-(pred <- 1214.642 + 161.969*temp) # puts into equation
-confint(lm1) # gets CI
-
+temp <- (63 - 32) * (5/9) # converts to celcius
 new <- data.frame(raw_temp = (temp)) # makes dataframe for predict
 
 predict(lm1, newdata = new, interval = 'confidence') #gets CI interval
@@ -141,20 +130,21 @@ interval is (1038.464, 6969.737).
 ```{r q8}
 lm2 <- lm(cnt ~ raw_ftemp, d) # num rentals by raw temperature
 summary(lm2) 
+summary(lm1)
 ```
 Feeling temperature is a better predictor of bike rentals, although not by large
 amount. Both have a statistically significant result (p < .001), but there is a
-lower standard error for feeling temperature and more importantly a higher 
-correlation coefficient and F-statistic. 
+lower standard error for feeling temperature and more importantly a larger F-statistic and adjusted R2. 
 
 ## Q9
 ```{r q9}
 # fit full model
 # names(d)
-lm_full <- lm(cnt ~ season + years + hbin + workbin + weathersit + raw_temp + raw_ftemp + raw_hum + raw_ws + (raw_ftemp * hbin), d)
+lm_full <- lm(cnt ~ season + years + hbin + workbin + weathersit + 
+                raw_temp + raw_ftemp + raw_hum + raw_ws + (raw_ftemp * hbin), d)
 summary(lm_full)
 ```
-Yes, there is a relationship between the predictors and the response, 
+a) Yes, there is a relationship between the predictors and the response, 
 as seen by the adjusted R-squared value of .8142 indicating a high level of correlation. 
 
 b) the predictors that appear to have a statistically significant relationship to
